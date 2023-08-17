@@ -1,0 +1,75 @@
+version: '3.5'
+
+networks:
+  pgnet:
+
+services:
+  grafana:
+    container_name: grafana-ms-hw-3
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    networks:
+      - pgnet
+
+  prometheus:
+    container_name: prometheus-ms-hw-3
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - pgnet
+
+  postgres:
+    container_name:   postgres-ms-hw-3
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./volumes/postgres/:/var/lib/postgresql/data
+    networks:
+      - pgnet
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  postgres-exporter:
+    container_name: pg-exporter-ms-hw-3
+    image: prometheuscommunity/postgres-exporter
+    ports:
+      - 9187:9187
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres:pass@postgres:5432/postgres?sslmode=disable"
+    networks:
+      - pgnet
+    links:
+      - postgres
+      - prometheus
+
+#  sonet-core:
+#    image: 'ms-hw-3-amd64'
+#    build:
+#      context: .
+#    container_name: app
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#    environment:
+#      - DB_URL=jdbc:postgresql://postgres:5432/postgres
+#      - DB_PWD=pass
+#    networks:
+#      - pgnet
+

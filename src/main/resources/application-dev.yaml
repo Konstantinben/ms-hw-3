@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: ms-hw-3
+  cloud:
+    kubernetes:
+      config:
+        enabled: true

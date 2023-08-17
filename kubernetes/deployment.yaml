@@ -1,0 +1,53 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+  labels: 
+    type: deployment-ms-hw-3
+    owner: Konstantin_Polyanichko
+spec:
+  replicas: 3
+  selector:
+      matchLabels:
+        project: mshw3
+  template:
+    metadata:
+      labels:
+        project: mshw3
+    spec:
+      containers:
+        - name: ms-hw-3-app
+          image: kpolyanichko/ms-hw-3-amd64:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ms-hw-3-secrets
+                  key: postgres.user
+            - name: DB_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: ms-hw-3-secrets
+                  key: postgres.password
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: ms-hw-3-secrets
+                  key: postgres.url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service
+  labels:
+    type: service-healthcheck-app
+    owner: Konstantin_Polyanichko
+spec:
+  selector:
+    project: mshw3
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
