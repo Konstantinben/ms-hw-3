@@ -16,7 +16,7 @@ $ `kubectl create namespace m && helm repo add ingress-nginx https://kubernetes.
 $ `helm repo add bitnami https://charts.bitnami.com/bitnami` <br/>
 $ `helm install my-release bitnami/postgresql --set global.postgresql.auth.username=postgres --set global.postgresql.auth.password=pass --set global.postgresql.auth.database=postgres` <br/>
 
-#### 4 - Скопируем в буффук IP сервиса my-release-postgresql:
+#### 4 - Скопируем в буфер IP сервиса my-release-postgresql:
 $ `kubectl get service my-release-postgresql` <br/>
 | NAME......................... | CLUSTER-IP | <br/>
 | my-release-postgresql | 10.107.6.221 | <br/>
