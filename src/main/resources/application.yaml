@@ -1,6 +1,8 @@
 spring:
   application:
     name: ms-hw-3
+  main:
+    cloud-platform: kubernetes
   cloud:
     kubernetes:
       config:
