@@ -18,6 +18,8 @@ $ `helm repo add bitnami https://charts.bitnami.com/bitnami` <br/>
 $ `helm install my-release bitnami/postgresql --set global.postgresql.auth.username=postgres --set global.postgresql.auth.password=pass --set global.postgresql.auth.database=postgres` <br/>
 
 #### 4 - Создадим secrets :
+$ `kubectl apply -f secret.yaml` <br/>
+или создадим их через командную строку  <br/>
 $ `kubectl create secret generic ms-hw-3-secrets \
 --from-literal=postgres.url=jdbc:postgresql://my-release-postgresql:5432/postgres \
 --from-literal=postgres.user=postgres \
